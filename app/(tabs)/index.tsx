@@ -18,8 +18,12 @@ import {
   MessageCircle,
   Bell
 } from 'lucide-react-native';
+import ContactAdminModal from '@/components/ui/ContactAdminModal';
+import { useState } from 'react';
 
 export default function DashboardScreen() {
+  const [showContactModal, setShowContactModal] = useState(false);
+
   const stats = [
     { label: 'Total Papers', value: '45', icon: FileText, color: '#4F46E5' },
     { label: 'This Month', value: '12', icon: Clock, color: '#059669' },
@@ -76,7 +80,15 @@ export default function DashboardScreen() {
           <Text style={styles.sectionTitle}>Quick Actions</Text>
           <View style={styles.quickActionsGrid}>
             {quickActions.map((action, index) => (
-              <TouchableOpacity key={index} style={styles.quickActionCard}>
+              <TouchableOpacity 
+                key={index} 
+                style={styles.quickActionCard}
+                onPress={() => {
+                  if (action.title === 'Contact Admin') {
+                    setShowContactModal(true);
+                  }
+                }}
+              >
                 <View style={[styles.quickActionIcon, { backgroundColor: `${action.color}15` }]}>
                   <action.icon size={24} color={action.color} />
                 </View>
@@ -123,6 +135,12 @@ export default function DashboardScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Contact Admin Modal */}
+      <ContactAdminModal
+        visible={showContactModal}
+        onClose={() => setShowContactModal(false)}
+      />
     </SafeAreaView>
   );
 }

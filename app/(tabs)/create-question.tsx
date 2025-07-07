@@ -92,15 +92,66 @@ export default function CreateQuestionScreen() {
       return;
     }
 
-    // Save question logic here
-    Alert.alert('Success', 'Question saved successfully!', [
-      { text: 'OK', onPress: () => router.back() }
-    ]);
+    // Validate MCQ specific fields
+    if (questionData.type === 'mcq') {
+      const filledOptions = questionData.options.filter(opt => opt.trim());
+      if (filledOptions.length < 2) {
+        Alert.alert('Error', 'Please provide at least 2 options for MCQ');
+        return;
+      }
+      if (!questionData.correctAnswer) {
+        Alert.alert('Error', 'Please mark the correct answer');
+        return;
+      }
+    }
+
+    // Create question object with ID and timestamp
+    const newQuestion = {
+      ...questionData,
+      id: Date.now(), // Simple ID generation
+      createdAt: new Date().toISOString(),
+      isOwn: true,
+      rating: 0,
+      usedCount: 0,
+      version: 1,
+    };
+
+    // In a real app, this would be saved to a database
+    console.log('Saving question:', newQuestion);
+    
+    Alert.alert(
+      'Success', 
+      'Question saved successfully! It has been added to your personal question bank.',
+      [{ text: 'OK', onPress: () => router.back() }]
+    );
   };
 
   const handlePreview = () => {
-    // Preview logic here
-    Alert.alert('Preview', 'Question preview will be shown here');
+    if (!questionData.content.trim()) {
+      Alert.alert('Error', 'Please enter question content to preview');
+      return;
+    }
+    
+    // Create a preview object
+    const previewQuestion = {
+      id: 0,
+      content: questionData.content,
+      subject: questionData.subject || 'Not selected',
+      class: questionData.class || 'Not selected',
+      chapter: questionData.chapter || 'Not specified',
+      type: questionData.type,
+      marks: parseInt(questionData.marks) || 1,
+      difficulty: questionData.difficulty,
+      options: questionData.type === 'mcq' ? questionData.options : undefined,
+      correctAnswer: questionData.correctAnswer,
+      explanation: questionData.explanation,
+      images: questionData.images,
+      rating: 0,
+      usedCount: 0,
+    };
+    
+    // In a real implementation, you'd show a preview modal
+    Alert.alert('Preview', 'Question preview would be displayed here with proper formatting');
   };
 
   const renderDropdown = (

@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { Search, Filter, Plus, BookOpen, TrendingUp, Clock, CreditCard as Edit, Eye, Flag, ChevronDown, Star } from 'lucide-react-native';
 import FilterModal from '@/components/ui/FilterModal';
+import QuestionPreviewModal from '@/components/ui/QuestionPreviewModal';
+import ReportModal from '@/components/ui/ReportModal';
 
 export default function QuestionsScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -18,6 +20,10 @@ export default function QuestionsScreen() {
   const [selectedSort, setSelectedSort] = useState('most-used');
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filters, setFilters] = useState({});
+  const [selectedQuestion, setSelectedQuestion] = useState<any>(null);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportingQuestionId, setReportingQuestionId] = useState<number | null>(null);
 
   const questions = [
     {
@@ -137,7 +143,11 @@ export default function QuestionsScreen() {
   const handleQuestionAction = (action: string, questionId: number) => {
     switch (action) {
       case 'preview':
-        Alert.alert('Preview', `Showing preview for question ${questionId}`);
+        const question = questions.find(q => q.id === questionId);
+        if (question) {
+          setSelectedQuestion(question);
+          setShowPreviewModal(true);
+        }
         break;
       case 'edit':
         Alert.alert('Edit', `Editing question ${questionId}`);
@@ -146,12 +156,17 @@ export default function QuestionsScreen() {
         Alert.alert('Success', 'Question added to current paper');
         break;
       case 'report':
-        Alert.alert('Report', 'Question reported successfully');
+        setReportingQuestionId(questionId);
+        setShowReportModal(true);
         break;
       case 'favorite':
         Alert.alert('Favorite', 'Question added to favorites');
         break;
     }
+  };
+
+  const handleReportSubmit = (report: { reason: string; details: string }) => {
+    Alert.alert('Success', 'Question reported successfully. Admin will review it shortly.');
   };
 
   const renderStarRating = (rating: number) => {
@@ -378,6 +393,42 @@ export default function QuestionsScreen() {
           setShowFilterModal(false);
         }}
         filters={filters}
+      />
+
+      {/* Question Preview Modal */}
+      {selectedQuestion && (
+        <QuestionPreviewModal
+          visible={showPreviewModal}
+          onClose={() => {
+            setShowPreviewModal(false);
+            setSelectedQuestion(null);
+          }}
+          question={selectedQuestion}
+          onEdit={() => {
+            setShowPreviewModal(false);
+            handleQuestionAction('edit', selectedQuestion.id);
+          }}
+          onReport={() => {
+            setShowPreviewModal(false);
+            setReportingQuestionId(selectedQuestion.id);
+            setShowReportModal(true);
+          }}
+          onAddToPaper={() => {
+            setShowPreviewModal(false);
+            handleQuestionAction('add-to-paper', selectedQuestion.id);
+          }}
+        />
+      )}
+
+      {/* Report Modal */}
+      <ReportModal
+        visible={showReportModal}
+        onClose={() => {
+          setShowReportModal(false);
+          setReportingQuestionId(null);
+        }}
+        questionId={reportingQuestionId || 0}
+        onSubmit={handleReportSubmit}
       />
     </SafeAreaView>
   );

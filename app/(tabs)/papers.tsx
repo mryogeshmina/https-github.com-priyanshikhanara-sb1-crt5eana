@@ -213,6 +213,12 @@ export default function MyPapersScreen() {
                 <Text style={styles.actionButtonText}>Duplicate</Text>
               </TouchableOpacity>
             </View>
+            {paper.status === 'completed' && (
+              <TouchableOpacity style={styles.actionButton}>
+                <FileText size={18} color="#7C3AED" />
+                <Text style={styles.actionButtonText}>Answer Key</Text>
+              </TouchableOpacity>
+            )}
           </View>
         ))}
       </ScrollView>
@@ -220,10 +226,10 @@ export default function MyPapersScreen() {
       {/* Quick Actions */}
       <View style={styles.quickActions}>
         <TouchableOpacity style={styles.quickActionButton}>
-          <Text style={styles.quickActionText}>Create Similar</Text>
+          <Text style={styles.quickActionText}>Export All PDFs</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.quickActionButton}>
-          <Text style={styles.quickActionText}>Export All</Text>
+          <Text style={styles.quickActionText}>Share Papers</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

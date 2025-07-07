@@ -12,6 +12,7 @@ import {
 import { FileText, SquareCheck as CheckSquare, BookOpen, Clock, Award, GraduationCap, ChevronDown, Settings } from 'lucide-react-native';
 import { router } from 'expo-router';
 import Toast from 'react-native-toast-message';
+import PaperGenerationModal from '@/components/ui/PaperGenerationModal';
 
 export default function CreatePaperScreen() {
   const [selectedPaperType, setSelectedPaperType] = useState('');
@@ -23,6 +24,7 @@ export default function CreatePaperScreen() {
   const [showSubjectDropdown, setShowSubjectDropdown] = useState(false);
   const [showClassDropdown, setShowClassDropdown] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState('');
+  const [showGenerationModal, setShowGenerationModal] = useState(false);
 
   const paperTypes = [
     { 
@@ -118,16 +120,20 @@ export default function CreatePaperScreen() {
       return;
     }
 
-    Toast.show({
-      type: 'success',
-      text1: 'Success',
-      text2: 'Paper configuration saved! Redirecting to question selection...'
-    });
+    // Create paper configuration
+    const paperConfig = {
+      title: paperTitle,
+      subject: selectedSubject,
+      class: selectedClass,
+      duration: duration,
+      totalMarks: totalMarks,
+      questionCount: 25, // Mock question count
+      type: selectedPaperType,
+      method: selectedMethod,
+    };
 
-    // Navigate to questions screen for now
-    setTimeout(() => {
-      router.push('/(tabs)/questions');
-    }, 1500);
+    // Show generation modal
+    setShowGenerationModal(true);
   };
 
   return (
@@ -355,6 +361,20 @@ export default function CreatePaperScreen() {
           </View>
         )}
       </ScrollView>
+
+      {/* Paper Generation Modal */}
+      <PaperGenerationModal
+        visible={showGenerationModal}
+        onClose={() => setShowGenerationModal(false)}
+        paperConfig={{
+          title: paperTitle,
+          subject: selectedSubject,
+          class: selectedClass,
+          duration: duration,
+          totalMarks: totalMarks,
+          questionCount: 25,
+        }}
+      />
     </SafeAreaView>
   );
 }
