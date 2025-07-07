@@ -2,188 +2,117 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Alert
+  TouchableOpacity,
+  Image,
 } from 'react-native';
 import { Link, router } from 'expo-router';
-import { Eye, EyeOff, BookOpen, Users, Award } from 'lucide-react-native';
-import { Phone } from 'lucide-react-native';
-import Toast from 'react-native-toast-message';
+import { BookOpen, Phone, Users, Award, ArrowRight } from 'lucide-react-native';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [userType, setUserType] = useState<'teacher' | 'admin'>('teacher');
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email.trim() || !password.trim()) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'Please fill in all fields'
-      });
-      return;
-    }
-
-    if (!email.includes('@')) {
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'Please enter a valid email address'
-      });
-      return;
-    }
-
-    setLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: 'Login successful!'
-      });
-      router.replace('/(tabs)');
-    }, 1500);
+  const handleContinueWithOTP = () => {
+    router.push('/(auth)/phone-verification');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-      >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.logoContainer}>
-              <BookOpen size={48} color="#4F46E5" />
-              <Text style={styles.logoText}>NCERT Paper</Text>
-              <Text style={styles.logoSubtext}>Generator</Text>
-            </View>
-            <Text style={styles.welcomeText}>Welcome Back!</Text>
-            <Text style={styles.subtitleText}>Sign in to create amazing test papers</Text>
-          </View>
-
-          {/* User Type Selection */}
-          <View style={styles.userTypeContainer}>
-            <TouchableOpacity
-              style={[
-                styles.userTypeButton,
-                userType === 'teacher' && styles.userTypeButtonActive
-              ]}
-              onPress={() => setUserType('teacher')}
-            >
-              <Users size={20} color={userType === 'teacher' ? '#FFFFFF' : '#6B7280'} />
-              <Text style={[
-                styles.userTypeText,
-                userType === 'teacher' && styles.userTypeTextActive
-              ]}>Teacher</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.userTypeButton,
-                userType === 'admin' && styles.userTypeButtonActive
-              ]}
-              onPress={() => setUserType('admin')}
-            >
-              <Award size={20} color={userType === 'admin' ? '#FFFFFF' : '#6B7280'} />
-              <Text style={[
-                styles.userTypeText,
-                userType === 'admin' && styles.userTypeTextActive
-              ]}>Admin</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Login Form */}
-          <View style={styles.form}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Email Address</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                placeholderTextColor="#9CA3AF"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Password</Text>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  style={styles.passwordInput}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                  placeholderTextColor="#9CA3AF"
-                />
-                <TouchableOpacity
-                  style={styles.eyeButton}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff size={20} color="#6B7280" />
-                  ) : (
-                    <Eye size={20} color="#6B7280" />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <TouchableOpacity style={styles.forgotPassword}>
-              <Link href="/(auth)/forgot-password" asChild>
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-              </Link>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={[styles.loginButton, loading && styles.loginButtonDisabled]} 
-              onPress={handleLogin}
-              disabled={loading}
-            >
-              <Text style={styles.loginButtonText}>
-                {loading ? 'Signing In...' : 'Sign In'}
-              </Text>
-            </TouchableOpacity>
-
-            <View style={styles.registerContainer}>
-              <Text style={styles.registerText}>Don't have an account? </Text>
-              <Link href="/(auth)/phone-verification" asChild>
-                <TouchableOpacity>
-                  <Text style={styles.registerLink}>Sign Up</Text>
-                </TouchableOpacity>
-              </Link>
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-      
-      {/* Quick Login with OTP */}
-      <View style={styles.otpLoginSection}>
-        <View style={styles.divider}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>OR</Text>
-          <View style={styles.dividerLine} />
+      {/* Header */}
+      <View style={styles.header}>
+        <View style={styles.logoContainer}>
+          <BookOpen size={64} color="#4F46E5" />
+          <Text style={styles.logoText}>NCERT Paper</Text>
+          <Text style={styles.logoSubtext}>Generator</Text>
         </View>
-        <Link href="/(auth)/phone-verification" asChild>
-          <TouchableOpacity style={styles.otpLoginButton}>
-            <Phone size={20} color="#4F46E5" />
-            <Text style={styles.otpLoginText}>Login with Mobile OTP</Text>
+        <Text style={styles.welcomeText}>Welcome!</Text>
+        <Text style={styles.subtitleText}>Create amazing test papers with ease</Text>
+      </View>
+
+      {/* Hero Image */}
+      <View style={styles.heroSection}>
+        <Image
+          source={{ uri: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800' }}
+          style={styles.heroImage}
+        />
+        <View style={styles.heroOverlay}>
+          <Text style={styles.heroTitle}>Trusted by 10,000+ Teachers</Text>
+          <Text style={styles.heroSubtitle}>Generate professional test papers in minutes</Text>
+        </View>
+      </View>
+
+      {/* User Type Selection */}
+      <View style={styles.userTypeSection}>
+        <Text style={styles.userTypeTitle}>I am a</Text>
+        <View style={styles.userTypeContainer}>
+          <TouchableOpacity
+            style={[
+              styles.userTypeButton,
+              userType === 'teacher' && styles.userTypeButtonActive
+            ]}
+            onPress={() => setUserType('teacher')}
+          >
+            <Users size={24} color={userType === 'teacher' ? '#FFFFFF' : '#6B7280'} />
+            <Text style={[
+              styles.userTypeText,
+              userType === 'teacher' && styles.userTypeTextActive
+            ]}>Teacher</Text>
+            <Text style={[
+              styles.userTypeDescription,
+              userType === 'teacher' && styles.userTypeDescriptionActive
+            ]}>Create and manage test papers</Text>
           </TouchableOpacity>
-        </Link>
+          
+          <TouchableOpacity
+            style={[
+              styles.userTypeButton,
+              userType === 'admin' && styles.userTypeButtonActive
+            ]}
+            onPress={() => setUserType('admin')}
+          >
+            <Award size={24} color={userType === 'admin' ? '#FFFFFF' : '#6B7280'} />
+            <Text style={[
+              styles.userTypeText,
+              userType === 'admin' && styles.userTypeTextActive
+            ]}>Admin</Text>
+            <Text style={[
+              styles.userTypeDescription,
+              userType === 'admin' && styles.userTypeDescriptionActive
+            ]}>Manage questions and users</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Continue Button */}
+      <View style={styles.actionSection}>
+        <TouchableOpacity style={styles.continueButton} onPress={handleContinueWithOTP}>
+          <Phone size={20} color="#FFFFFF" />
+          <Text style={styles.continueButtonText}>Continue with Mobile Number</Text>
+          <ArrowRight size={20} color="#FFFFFF" />
+        </TouchableOpacity>
+        
+        <Text style={styles.secureText}>🔒 Secure OTP verification</Text>
+      </View>
+
+      {/* Features */}
+      <View style={styles.featuresSection}>
+        <View style={styles.featureItem}>
+          <Text style={styles.featureIcon}>📝</Text>
+          <Text style={styles.featureText}>Create Papers</Text>
+        </View>
+        <View style={styles.featureItem}>
+          <Text style={styles.featureIcon}>📚</Text>
+          <Text style={styles.featureText}>Question Bank</Text>
+        </View>
+        <View style={styles.featureItem}>
+          <Text style={styles.featureIcon}>📄</Text>
+          <Text style={styles.featureText}>PDF Export</Text>
+        </View>
+        <View style={styles.featureItem}>
+          <Text style={styles.featureIcon}>⚡</Text>
+          <Text style={styles.featureText}>Quick Generate</Text>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -194,36 +123,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  keyboardView: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 24,
-  },
   header: {
     alignItems: 'center',
-    paddingTop: 60,
-    paddingBottom: 40,
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 20,
   },
   logoContainer: {
     alignItems: 'center',
     marginBottom: 24,
   },
   logoText: {
-    fontSize: 28,
+    fontSize: 32,
     fontFamily: 'Inter-Bold',
     color: '#1F2937',
-    marginTop: 8,
+    marginTop: 12,
   },
   logoSubtext: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: 'Inter-Medium',
     color: '#6B7280',
     marginTop: -4,
   },
   welcomeText: {
-    fontSize: 24,
+    fontSize: 28,
     fontFamily: 'Inter-Bold',
     color: '#1F2937',
     marginBottom: 8,
@@ -234,147 +157,136 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     textAlign: 'center',
   },
+  heroSection: {
+    position: 'relative',
+    marginHorizontal: 24,
+    marginVertical: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    height: 160,
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+  },
+  heroOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    padding: 16,
+  },
+  heroTitle: {
+    fontSize: 18,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  heroSubtitle: {
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#E5E7EB',
+  },
+  userTypeSection: {
+    paddingHorizontal: 24,
+    marginBottom: 24,
+  },
+  userTypeTitle: {
+    fontSize: 18,
+    fontFamily: 'Inter-SemiBold',
+    color: '#1F2937',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
   userTypeContainer: {
     flexDirection: 'row',
-    marginBottom: 32,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
-    padding: 4,
+    gap: 12,
   },
   userTypeButton: {
     flex: 1,
-    flexDirection: 'row',
+    backgroundColor: '#F9FAFB',
+    borderRadius: 16,
+    padding: 20,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 8,
-    gap: 8,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   userTypeButtonActive: {
     backgroundColor: '#4F46E5',
+    borderColor: '#4F46E5',
   },
   userTypeText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontFamily: 'Inter-SemiBold',
     color: '#6B7280',
+    marginTop: 8,
+    marginBottom: 4,
   },
   userTypeTextActive: {
     color: '#FFFFFF',
   },
-  form: {
-    flex: 1,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    color: '#374151',
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
+  userTypeDescription: {
+    fontSize: 12,
     fontFamily: 'Inter-Regular',
-    backgroundColor: '#FFFFFF',
+    color: '#9CA3AF',
+    textAlign: 'center',
+    lineHeight: 16,
   },
-  passwordContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+  userTypeDescriptionActive: {
+    color: '#E0E7FF',
   },
-  passwordInput: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    fontFamily: 'Inter-Regular',
-  },
-  eyeButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  forgotPassword: {
-    alignSelf: 'flex-end',
-    marginBottom: 32,
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#4F46E5',
-  },
-  loginButton: {
-    backgroundColor: '#4F46E5',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
+  actionSection: {
+    paddingHorizontal: 24,
     marginBottom: 24,
   },
-  loginButtonDisabled: {
-    backgroundColor: '#9CA3AF',
+  continueButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4F46E5',
+    borderRadius: 16,
+    paddingVertical: 18,
+    gap: 12,
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
-  loginButtonText: {
-    fontSize: 16,
+  continueButtonText: {
+    fontSize: 18,
     fontFamily: 'Inter-SemiBold',
     color: '#FFFFFF',
   },
-  registerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  registerText: {
+  secureText: {
     fontSize: 14,
     fontFamily: 'Inter-Regular',
     color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 12,
   },
-  registerLink: {
-    fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#4F46E5',
-  },
-  otpLoginSection: {
-    paddingHorizontal: 24,
-    paddingBottom: 32,
-  },
-  divider: {
+  featuresSection: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    backgroundColor: '#F9FAFB',
+    marginHorizontal: 24,
+    borderRadius: 16,
+  },
+  featureItem: {
     alignItems: 'center',
-    marginVertical: 20,
-  },
-  dividerLine: {
     flex: 1,
-    height: 1,
-    backgroundColor: '#E5E7EB',
   },
-  dividerText: {
-    fontSize: 14,
+  featureIcon: {
+    fontSize: 24,
+    marginBottom: 8,
+  },
+  featureText: {
+    fontSize: 12,
     fontFamily: 'Inter-Medium',
     color: '#6B7280',
-    marginHorizontal: 16,
-  },
-  otpLoginButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F8FAFF',
-    borderWidth: 1,
-    borderColor: '#4F46E5',
-    borderRadius: 12,
-    paddingVertical: 16,
-    gap: 8,
-  },
-  otpLoginText: {
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
-    color: '#4F46E5',
+    textAlign: 'center',
   },
 });

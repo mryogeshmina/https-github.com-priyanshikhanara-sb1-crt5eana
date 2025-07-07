@@ -2,58 +2,106 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView
+  TouchableOpacity,
+  Image,
+  ScrollView,
 } from 'react-native';
 import { Link, router } from 'expo-router';
-import { Eye, EyeOff, BookOpen, Users, Award } from 'lucide-react-native';
+import { BookOpen, Phone, Users, Award, ArrowRight, CheckCircle } from 'lucide-react-native';
 
 export default function RegisterScreen() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    school: '',
-    subjects: '',
-  });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userType, setUserType] = useState<'teacher' | 'admin'>('teacher');
 
-  const handleRegister = () => {
-    // TODO: Implement registration logic
-    router.replace('/(tabs)');
+  const handleGetStarted = () => {
+    router.push('/(auth)/phone-verification');
   };
 
-  const updateFormData = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  const benefits = [
+    { icon: '🚀', title: 'Quick Setup', description: 'Get started in under 2 minutes' },
+    { icon: '📱', title: 'Mobile First', description: 'Designed for mobile convenience' },
+    { icon: '🔒', title: 'Secure', description: 'OTP-based secure authentication' },
+    { icon: '📚', title: 'Rich Content', description: 'Access to thousands of questions' },
+  ];
+
+  const features = [
+    'Create unlimited test papers',
+    'Access NCERT question bank',
+    'Export to PDF and Word formats',
+    'Add custom questions',
+    'Generate answer keys',
+    'Mobile-friendly interface',
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardView}
-      >
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.logoContainer}>
-              <BookOpen size={48} color="#4F46E5" />
-              <Text style={styles.logoText}>NCERT Paper</Text>
-              <Text style={styles.logoSubtext}>Generator</Text>
-            </View>
-            <Text style={styles.welcomeText}>Create Account</Text>
-            <Text style={styles.subtitleText}>Join thousands of teachers creating amazing papers</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.logoContainer}>
+            <BookOpen size={56} color="#4F46E5" />
+            <Text style={styles.logoText}>NCERT Paper</Text>
+            <Text style={styles.logoSubtext}>Generator</Text>
           </View>
+          <Text style={styles.welcomeText}>Join Thousands of Teachers</Text>
+          <Text style={styles.subtitleText}>
+            Create professional test papers with our comprehensive question bank
+          </Text>
+        </View>
 
-          {/* User Type Selection */}
+        {/* Hero Section */}
+        <View style={styles.heroSection}>
+          <Image
+            source={{ uri: 'https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=800' }}
+            style={styles.heroImage}
+          />
+          <View style={styles.statsOverlay}>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>10K+</Text>
+              <Text style={styles.statLabel}>Teachers</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>50K+</Text>
+              <Text style={styles.statLabel}>Questions</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>1M+</Text>
+              <Text style={styles.statLabel}>Papers</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Benefits */}
+        <View style={styles.benefitsSection}>
+          <Text style={styles.sectionTitle}>Why Choose Us?</Text>
+          <View style={styles.benefitsGrid}>
+            {benefits.map((benefit, index) => (
+              <View key={index} style={styles.benefitCard}>
+                <Text style={styles.benefitIcon}>{benefit.icon}</Text>
+                <Text style={styles.benefitTitle}>{benefit.title}</Text>
+                <Text style={styles.benefitDescription}>{benefit.description}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Features */}
+        <View style={styles.featuresSection}>
+          <Text style={styles.sectionTitle}>What You Get</Text>
+          <View style={styles.featuresList}>
+            {features.map((feature, index) => (
+              <View key={index} style={styles.featureItem}>
+                <CheckCircle size={20} color="#059669" />
+                <Text style={styles.featureText}>{feature}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* User Type Selection */}
+        <View style={styles.userTypeSection}>
+          <Text style={styles.sectionTitle}>I am a</Text>
           <View style={styles.userTypeContainer}>
             <TouchableOpacity
               style={[
@@ -62,12 +110,17 @@ export default function RegisterScreen() {
               ]}
               onPress={() => setUserType('teacher')}
             >
-              <Users size={20} color={userType === 'teacher' ? '#FFFFFF' : '#6B7280'} />
+              <Users size={28} color={userType === 'teacher' ? '#FFFFFF' : '#6B7280'} />
               <Text style={[
                 styles.userTypeText,
                 userType === 'teacher' && styles.userTypeTextActive
               ]}>Teacher</Text>
+              <Text style={[
+                styles.userTypeDescription,
+                userType === 'teacher' && styles.userTypeDescriptionActive
+              ]}>Create and manage test papers for your students</Text>
             </TouchableOpacity>
+            
             <TouchableOpacity
               style={[
                 styles.userTypeButton,
@@ -75,125 +128,39 @@ export default function RegisterScreen() {
               ]}
               onPress={() => setUserType('admin')}
             >
-              <Award size={20} color={userType === 'admin' ? '#FFFFFF' : '#6B7280'} />
+              <Award size={28} color={userType === 'admin' ? '#FFFFFF' : '#6B7280'} />
               <Text style={[
                 styles.userTypeText,
                 userType === 'admin' && styles.userTypeTextActive
               ]}>Admin</Text>
+              <Text style={[
+                styles.userTypeDescription,
+                userType === 'admin' && styles.userTypeDescriptionActive
+              ]}>Manage questions, users, and system settings</Text>
             </TouchableOpacity>
           </View>
+        </View>
 
-          {/* Registration Form */}
-          <View style={styles.form}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Full Name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your full name"
-                value={formData.name}
-                onChangeText={(value) => updateFormData('name', value)}
-                placeholderTextColor="#9CA3AF"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Email Address</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your email"
-                value={formData.email}
-                onChangeText={(value) => updateFormData('email', value)}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                placeholderTextColor="#9CA3AF"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>School/Institution</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter your school name"
-                value={formData.school}
-                onChangeText={(value) => updateFormData('school', value)}
-                placeholderTextColor="#9CA3AF"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Subjects (comma separated)</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="e.g., Mathematics, Physics, Chemistry"
-                value={formData.subjects}
-                onChangeText={(value) => updateFormData('subjects', value)}
-                placeholderTextColor="#9CA3AF"
-              />
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Password</Text>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  style={styles.passwordInput}
-                  placeholder="Create a password"
-                  value={formData.password}
-                  onChangeText={(value) => updateFormData('password', value)}
-                  secureTextEntry={!showPassword}
-                  placeholderTextColor="#9CA3AF"
-                />
-                <TouchableOpacity
-                  style={styles.eyeButton}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff size={20} color="#6B7280" />
-                  ) : (
-                    <Eye size={20} color="#6B7280" />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Confirm Password</Text>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  style={styles.passwordInput}
-                  placeholder="Confirm your password"
-                  value={formData.confirmPassword}
-                  onChangeText={(value) => updateFormData('confirmPassword', value)}
-                  secureTextEntry={!showConfirmPassword}
-                  placeholderTextColor="#9CA3AF"
-                />
-                <TouchableOpacity
-                  style={styles.eyeButton}
-                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff size={20} color="#6B7280" />
-                  ) : (
-                    <Eye size={20} color="#6B7280" />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-              <Text style={styles.registerButtonText}>Create Account</Text>
-            </TouchableOpacity>
-
-            <View style={styles.loginContainer}>
-              <Text style={styles.loginText}>Already have an account? </Text>
-              <Link href="/(auth)/phone-verification" asChild>
-                <TouchableOpacity>
-                  <Text style={styles.loginLink}>Login with OTP</Text>
-                </TouchableOpacity>
-              </Link>
-            </View>
+        {/* Get Started Button */}
+        <View style={styles.actionSection}>
+          <TouchableOpacity style={styles.getStartedButton} onPress={handleGetStarted}>
+            <Phone size={20} color="#FFFFFF" />
+            <Text style={styles.getStartedButtonText}>Get Started with Mobile Number</Text>
+            <ArrowRight size={20} color="#FFFFFF" />
+          </TouchableOpacity>
+          
+          <Text style={styles.secureText}>🔒 Quick & secure OTP verification</Text>
+          
+          <View style={styles.loginContainer}>
+            <Text style={styles.loginText}>Already have an account? </Text>
+            <Link href="/(auth)/login" asChild>
+              <TouchableOpacity>
+                <Text style={styles.loginLink}>Sign In</Text>
+              </TouchableOpacity>
+            </Link>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -203,21 +170,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  keyboardView: {
-    flex: 1,
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 24,
-  },
   header: {
     alignItems: 'center',
-    paddingTop: 40,
-    paddingBottom: 32,
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   logoText: {
     fontSize: 28,
@@ -236,99 +197,186 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Bold',
     color: '#1F2937',
     marginBottom: 8,
+    textAlign: 'center',
   },
   subtitleText: {
     fontSize: 16,
     fontFamily: 'Inter-Regular',
     color: '#6B7280',
     textAlign: 'center',
+    lineHeight: 24,
   },
-  userTypeContainer: {
+  heroSection: {
+    position: 'relative',
+    marginHorizontal: 24,
+    marginVertical: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    height: 200,
+  },
+  heroImage: {
+    width: '100%',
+    height: '100%',
+  },
+  statsOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     flexDirection: 'row',
-    marginBottom: 32,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
-    padding: 4,
+    justifyContent: 'space-around',
+    paddingVertical: 16,
   },
-  userTypeButton: {
+  statItem: {
+    alignItems: 'center',
+  },
+  statNumber: {
+    fontSize: 20,
+    fontFamily: 'Inter-Bold',
+    color: '#FFFFFF',
+  },
+  statLabel: {
+    fontSize: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#E5E7EB',
+  },
+  benefitsSection: {
+    paddingHorizontal: 24,
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontFamily: 'Inter-Bold',
+    color: '#1F2937',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  benefitsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  benefitCard: {
     flex: 1,
+    minWidth: '45%',
+    backgroundColor: '#F9FAFB',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  benefitIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  benefitTitle: {
+    fontSize: 14,
+    fontFamily: 'Inter-SemiBold',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  benefitDescription: {
+    fontSize: 12,
+    fontFamily: 'Inter-Regular',
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 16,
+  },
+  featuresSection: {
+    paddingHorizontal: 24,
+    marginBottom: 24,
+  },
+  featuresList: {
+    backgroundColor: '#F9FAFB',
+    borderRadius: 12,
+    padding: 16,
+  },
+  featureItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    borderRadius: 8,
-    gap: 8,
+    paddingVertical: 8,
+    gap: 12,
+  },
+  featureText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#1F2937',
+    flex: 1,
+  },
+  userTypeSection: {
+    paddingHorizontal: 24,
+    marginBottom: 24,
+  },
+  userTypeContainer: {
+    gap: 12,
+  },
+  userTypeButton: {
+    backgroundColor: '#F9FAFB',
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   userTypeButtonActive: {
     backgroundColor: '#4F46E5',
+    borderColor: '#4F46E5',
   },
   userTypeText: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontSize: 18,
+    fontFamily: 'Inter-SemiBold',
     color: '#6B7280',
+    marginTop: 12,
+    marginBottom: 8,
   },
   userTypeTextActive: {
     color: '#FFFFFF',
   },
-  form: {
-    flex: 1,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    color: '#374151',
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
+  userTypeDescription: {
+    fontSize: 14,
     fontFamily: 'Inter-Regular',
-    backgroundColor: '#FFFFFF',
+    color: '#9CA3AF',
+    textAlign: 'center',
+    lineHeight: 20,
   },
-  passwordContainer: {
+  userTypeDescriptionActive: {
+    color: '#E0E7FF',
+  },
+  actionSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+  },
+  getStartedButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
-  },
-  passwordInput: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    fontSize: 16,
-    fontFamily: 'Inter-Regular',
-  },
-  eyeButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  registerButton: {
+    justifyContent: 'center',
     backgroundColor: '#4F46E5',
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    marginBottom: 24,
-    marginTop: 12,
+    borderRadius: 16,
+    paddingVertical: 18,
+    gap: 12,
+    shadowColor: '#4F46E5',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
+    marginBottom: 12,
   },
-  registerButtonText: {
+  getStartedButtonText: {
     fontSize: 16,
     fontFamily: 'Inter-SemiBold',
     color: '#FFFFFF',
+  },
+  secureText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Regular',
+    color: '#6B7280',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 32,
   },
   loginText: {
     fontSize: 14,

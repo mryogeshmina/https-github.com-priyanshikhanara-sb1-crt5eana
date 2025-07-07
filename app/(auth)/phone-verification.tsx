@@ -226,7 +226,7 @@ export default function PhoneVerificationScreen() {
         
         <Text style={styles.welcomeText}>Enter Verification Code</Text>
         <Text style={styles.subtitleText}>
-          We've sent a 6-digit code to +91 {phoneNumber}
+          We've sent a 6-digit code to +91 {phoneNumber}{'\n'}Use 123456 for demo
         </Text>
       </View>
 
