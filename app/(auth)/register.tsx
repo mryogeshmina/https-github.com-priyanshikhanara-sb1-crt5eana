@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Link, router } from 'expo-router';
-import { BookOpen, Phone, Users, Award, ArrowRight, CheckCircle } from 'lucide-react-native';
+import { BookOpen, Phone, Users, Award, ArrowRight, CircleCheck as CheckCircle } from 'lucide-react-native';
 
 export default function RegisterScreen() {
   const [userType, setUserType] = useState<'teacher' | 'admin'>('teacher');
