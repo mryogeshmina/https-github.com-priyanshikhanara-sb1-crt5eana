@@ -9,7 +9,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { X, MessageCircle, Send, HelpCircle, Bug, Lightbulb } from 'lucide-react-native';
+import { X, MessageCircle, Send, CircleHelp as HelpCircle, Bug, Lightbulb } from 'lucide-react-native';
 
 interface ContactAdminModalProps {
   visible: boolean;

@@ -8,7 +8,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { X, FileText, Download, Eye, Settings, CheckCircle } from 'lucide-react-native';
+import { X, FileText, Download, Eye, Settings, CircleCheck as CheckCircle } from 'lucide-react-native';
 
 interface PaperGenerationModalProps {
   visible: boolean;
