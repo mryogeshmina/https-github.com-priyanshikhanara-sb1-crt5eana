@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { Eye, EyeOff, BookOpen, Users, Award } from 'lucide-react-native';
+import { Phone } from 'lucide-react-native';
 import Toast from 'react-native-toast-message';
 
 export default function LoginScreen() {
@@ -160,7 +161,7 @@ export default function LoginScreen() {
 
             <View style={styles.registerContainer}>
               <Text style={styles.registerText}>Don't have an account? </Text>
-              <Link href="/(auth)/register" asChild>
+              <Link href="/(auth)/phone-verification" asChild>
                 <TouchableOpacity>
                   <Text style={styles.registerLink}>Sign Up</Text>
                 </TouchableOpacity>
@@ -169,6 +170,21 @@ export default function LoginScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      
+      {/* Quick Login with OTP */}
+      <View style={styles.otpLoginSection}>
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>OR</Text>
+          <View style={styles.dividerLine} />
+        </View>
+        <Link href="/(auth)/phone-verification" asChild>
+          <TouchableOpacity style={styles.otpLoginButton}>
+            <Phone size={20} color="#4F46E5" />
+            <Text style={styles.otpLoginText}>Login with Mobile OTP</Text>
+          </TouchableOpacity>
+        </Link>
+      </View>
     </SafeAreaView>
   );
 }
@@ -322,6 +338,42 @@ const styles = StyleSheet.create({
   },
   registerLink: {
     fontSize: 14,
+    fontFamily: 'Inter-SemiBold',
+    color: '#4F46E5',
+  },
+  otpLoginSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E5E7EB',
+  },
+  dividerText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
+    color: '#6B7280',
+    marginHorizontal: 16,
+  },
+  otpLoginButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F8FAFF',
+    borderWidth: 1,
+    borderColor: '#4F46E5',
+    borderRadius: 12,
+    paddingVertical: 16,
+    gap: 8,
+  },
+  otpLoginText: {
+    fontSize: 16,
     fontFamily: 'Inter-SemiBold',
     color: '#4F46E5',
   },
