@@ -8,7 +8,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import { X, Star, Flag, Edit, Copy } from 'lucide-react-native';
+import { X, Star, Flag, CreditCard as Edit, Copy } from 'lucide-react-native';
 
 interface QuestionPreviewModalProps {
   visible: boolean;
